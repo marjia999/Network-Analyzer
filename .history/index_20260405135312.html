@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Analyzer | Domain & IP Analysis Tool</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h1>Network Analyzer</h1>
+            <p>Analyze domains and IP addresses with publicly available data</p>
+            <div class="badge">
+                <i class="fas fa-balance-scale"></i> Legal - Public Information Only
+            </div>
+        </div>
+
+        <div class="search-card">
+            <form id="lookupForm">
+                <div class="input-group">
+                    <label for="target">
+                        <i class="fas fa-search"></i> Enter Domain Name or IP Address
+                    </label>
+                    <input type="text" id="target" placeholder="Example: google.com, 8.8.8.8, github.com, 1.1.1.1" required>
+                    <div class="input-hint">Works with both domain names (google.com) and IP addresses (8.8.8.8)</div>
+                </div>
+
+                <div class="example-targets">
+                    <span>Try these examples:</span>
+                    <button type="button" class="example-btn" data-target="google.com">Google Domain</button>
+                    <button type="button" class="example-btn" data-target="8.8.8.8">Google DNS IP</button>
+                    <button type="button" class="example-btn" data-target="github.com">GitHub Domain</button>
+                    <button type="button" class="example-btn" data-target="1.1.1.1">Cloudflare IP</button>
+                    <button type="button" class="example-btn" data-target="cloudflare.com">Cloudflare Domain</button>
+                </div>
+
+                <button type="submit" id="lookupBtn">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analyze Target</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+
+        <div id="loading" style="display: none;">
+            <div class="loader-centered">
+                <div class="loader-spinner-centered"></div>
+                <h3>Analyzing target...</h3>
+            </div>
+        </div>
+
+        <div id="results" style="display: none;">
+            <div class="result-section">
+                <div class="section-header">
+                    <i class="fas fa-info-circle"></i>
+                    <h2>Target Overview</h2>
+                </div>
+                <div class="overview-grid" id="overview"></div>
+            </div>
+
+            <div class="result-section" id="reverseDnsSection" style="display: none;">
+                <div class="section-header">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h2>Reverse DNS Lookup</h2>
+                </div>
+                <div class="info-grid" id="reverseDns"></div>
+            </div>
+
+            <div class="result-section" id="ptrSection" style="display: none;">
+                <div class="section-header">
+                    <i class="fas fa-arrow-left"></i>
+                    <h2>PTR Records</h2>
+                </div>
+                <div class="info-grid" id="ptrRecords"></div>
+            </div>
+
+            <div class="result-section">
+                <div class="section-header">
+                    <i class="fas fa-file-contract"></i>
+                    <h2>WHOIS Information</h2>
+                </div>
+                <div class="info-grid" id="whois"></div>
+            </div>
+
+            <div class="result-section" id="dnsSection" style="display: none;">
+                <div class="section-header">
+                    <i class="fas fa-server"></i>
+                    <h2>DNS Records</h2>
+                </div>
+                <div class="dns-content" id="dnsContent"></div>
+            </div>
+
+            <div class="result-section" id="sslSection" style="display: none;">
+                <div class="section-header">
+                    <i class="fas fa-lock"></i>
+                    <h2>SSL Certificate</h2>
+                </div>
+                <div class="info-grid" id="ssl"></div>
+            </div>
+
+            <div class="result-section">
+                <div class="section-header">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h2>Geolocation and Hosting</h2>
+                </div>
+                <div class="info-grid" id="location"></div>
+            </div>
+
+            <div class="result-section">
+                <div class="section-header">
+                    <i class="fas fa-plug"></i>
+                    <h2>Common Open Ports</h2>
+                </div>
+                <div class="ports-list" id="ports"></div>
+            </div>
+
+            <div class="result-section">
+                <div class="section-header">
+                    <i class="fas fa-network-wired"></i>
+                    <h2>Ping Test</h2>
+                </div>
+                <div class="ping-results" id="ping"></div>
+            </div>
+
+            <div class="result-section">
+                <div class="section-header">
+                    <i class="fas fa-route"></i>
+                    <h2>Traceroute</h2>
+                </div>
+                <div class="traceroute-results" id="traceroute"></div>
+            </div>
+
+            <div class="result-section" id="techSection" style="display: none;">
+                <div class="section-header">
+                    <i class="fas fa-code"></i>
+                    <h2>Detected Technologies</h2>
+                </div>
+                <div class="tech-list" id="technologies"></div>
+            </div>
+
+            <div class="result-section" id="subdomainSection" style="display: none;">
+                <div class="section-header">
+                    <i class="fas fa-sitemap"></i>
+                    <h2>Active Subdomains</h2>
+                </div>
+                <div class="subdomain-list" id="subdomains"></div>
+            </div>
+
+            <div class="export-buttons">
+                <button id="exportJSON" class="export-btn">
+                    <i class="fas fa-download"></i> Export as JSON
+                </button>
+                <button id="copyResults" class="export-btn">
+                    <i class="fas fa-copy"></i> Copy Results
+                </button>
+            </div>
+        </div>
+
+        <div class="info-note">
+            <i class="fas fa-info-circle"></i>
+            <div>
+                <strong>About Network Analyzer</strong>
+                <p>This tool only collects publicly available information (WHOIS, DNS records, SSL certificates, geolocation data, ping, traceroute, etc.) which is completely legal to access. No active exploitation or intrusive scanning is performed.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.example-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('target').value = btn.dataset.target;
+                document.getElementById('lookupForm').dispatchEvent(new Event('submit'));
+            });
+        });
+
+        document.getElementById('lookupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const target = document.getElementById('target').value;
+            
+            if (!target) {
+                alert('Please enter a domain name or IP address');
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'flex';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('lookupBtn').disabled = true;
+            
+            try {
+                const response = await fetch('/lookup', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({target: target})
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                
+                displayResults(data);
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('lookupBtn').disabled = false;
+            }
+        });
+        
+        function displayResults(data) {
+            document.getElementById('overview').innerHTML = `
+                <div class="info-card">
+                    <div class="info-label"><i class="fas fa-crosshairs"></i> Target</div>
+                    <div class="info-value">${data.target}</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label"><i class="fas fa-tag"></i> Type</div>
+                    <div class="info-value">${data.target_type}</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label"><i class="fas fa-clock"></i> Analysis Time</div>
+                    <div class="info-value">${data.timestamp}</div>
+                </div>
+            `;
+            
+            if (data.reverse_dns) {
+                document.getElementById('reverseDnsSection').style.display = 'block';
+                document.getElementById('reverseDns').innerHTML = `
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-exchange-alt"></i> Hostname</div>
+                        <div class="info-value">${data.reverse_dns}</div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('reverseDnsSection').style.display = 'none';
+            }
+            
+            if (data.ptr_records && data.ptr_records.length > 0) {
+                document.getElementById('ptrSection').style.display = 'block';
+                document.getElementById('ptrRecords').innerHTML = `
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-arrow-left"></i> PTR Records</div>
+                        <div class="info-value">${data.ptr_records.join(', ')}</div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('ptrSection').style.display = 'none';
+            }
+            
+            const whois = data.whois;
+            if (whois && !whois.error) {
+                document.getElementById('whois').innerHTML = `
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-building"></i> Registrar</div>
+                        <div class="info-value">${whois.registrar || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-calendar-plus"></i> Created</div>
+                        <div class="info-value">${whois.creation_date || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-calendar-times"></i> Expires</div>
+                        <div class="info-value">${whois.expiration_date || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-user"></i> Organization</div>
+                        <div class="info-value">${whois.org || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-flag"></i> Country</div>
+                        <div class="info-value">${whois.country || 'N/A'}</div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('whois').innerHTML = `
+                    <div class="info-card">
+                        <div class="info-value">WHOIS information not available for this target</div>
+                    </div>
+                `;
+            }
+            
+            if (data.dns_records && Object.keys(data.dns_records).length > 0) {
+                document.getElementById('dnsSection').style.display = 'block';
+                const dns = data.dns_records;
+                const dnsTypes = ['A', 'AAAA', 'MX', 'NS', 'TXT', 'CNAME', 'SOA'];
+                let dnsHTML = '';
+                
+                dnsTypes.forEach(type => {
+                    if (dns[type] && dns[type].length > 0) {
+                        dnsHTML += `
+                            <div class="dns-record">
+                                <div class="dns-type">${type}</div>
+                                <div class="dns-values">
+                                    ${dns[type].map(value => `<div class="dns-value">${value}</div>`).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                if (dnsHTML === '') {
+                    dnsHTML = '<div class="no-data">No DNS records found</div>';
+                }
+                
+                document.getElementById('dnsContent').innerHTML = dnsHTML;
+            } else {
+                document.getElementById('dnsSection').style.display = 'none';
+            }
+            
+            if (data.ssl) {
+                document.getElementById('sslSection').style.display = 'block';
+                document.getElementById('ssl').innerHTML = `
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-building"></i> Issuer</div>
+                        <div class="info-value">${data.ssl.issuer?.organizationName || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-user-check"></i> Subject</div>
+                        <div class="info-value">${data.ssl.subject?.commonName || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-calendar-check"></i> Valid From</div>
+                        <div class="info-value">${data.ssl.start || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-calendar-times"></i> Valid Until</div>
+                        <div class="info-value">${data.ssl.expiry || 'N/A'}</div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('sslSection').style.display = 'none';
+            }
+            
+            const loc = data.geolocation;
+            if (loc && !loc.error) {
+                document.getElementById('location').innerHTML = `
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-map-pin"></i> IP Address</div>
+                        <div class="info-value">${loc.ip || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-globe"></i> Country</div>
+                        <div class="info-value">${loc.country || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-city"></i> City</div>
+                        <div class="info-value">${loc.city || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-building"></i> Region</div>
+                        <div class="info-value">${loc.region || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-tachometer-alt"></i> ISP</div>
+                        <div class="info-value">${loc.isp || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-chart-line"></i> Organization</div>
+                        <div class="info-value">${loc.org || 'N/A'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-clock"></i> Timezone</div>
+                        <div class="info-value">${loc.timezone || 'N/A'}</div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('location').innerHTML = `
+                    <div class="info-card">
+                        <div class="info-value">Geolocation data not available</div>
+                    </div>
+                `;
+            }
+            
+            if (data.open_ports && data.open_ports.length > 0) {
+                document.getElementById('ports').innerHTML = data.open_ports.map(port => 
+                    `<span class="port-badge">Port ${port.port} (${port.service})</span>`
+                ).join('');
+            } else {
+                document.getElementById('ports').innerHTML = '<div class="no-data">No common ports found open</div>';
+            }
+            
+            const ping = data.ping;
+            if (ping && ping.success) {
+                document.getElementById('ping').innerHTML = `
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="info-label"><i class="fas fa-check-circle"></i> Status</div>
+                            <div class="info-value success">Host is reachable</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label"><i class="fas fa-exchange-alt"></i> Packets Sent</div>
+                            <div class="info-value">${ping.packets_sent}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label"><i class="fas fa-check"></i> Packets Received</div>
+                            <div class="info-value">${ping.packets_received}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label"><i class="fas fa-chart-line"></i> Packet Loss</div>
+                            <div class="info-value">${ping.packet_loss}</div>
+                        </div>
+                        <div class="info-card full-width">
+                            <div class="info-label"><i class="fas fa-clock"></i> Response Times (ms)</div>
+                            <div class="info-value">${ping.times ? ping.times.join(', ') : 'N/A'}</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('ping').innerHTML = `
+                    <div class="info-card">
+                        <div class="info-value error">${ping?.error || 'Host is unreachable'}</div>
+                    </div>
+                `;
+            }
+            
+            const traceroute = data.traceroute;
+            if (traceroute && traceroute.success && traceroute.hops && traceroute.hops.length > 0) {
+                let hopsHtml = '<div class="traceroute-table"><div class="traceroute-header"><span>Hop</span><span>IP Address</span><span>Response Times (ms)</span></div>';
+                traceroute.hops.forEach(hop => {
+                    hopsHtml += `
+                        <div class="traceroute-row">
+                            <span class="hop-number">${hop.hop}</span>
+                            <span class="hop-ip">${hop.ip}</span>
+                            <span class="hop-times">${hop.times.join(', ') || 'N/A'}</span>
+                        </div>
+                    `;
+                });
+                hopsHtml += '</div>';
+                document.getElementById('traceroute').innerHTML = hopsHtml;
+            } else {
+                document.getElementById('traceroute').innerHTML = `
+                    <div class="info-card">
+                        <div class="info-value">${traceroute?.error || 'Traceroute information not available'}</div>
+                    </div>
+                `;
+            }
+            
+            if (data.technologies && data.technologies.length > 0 && data.technologies[0] !== "Technology detection only available for domains") {
+                document.getElementById('techSection').style.display = 'block';
+                document.getElementById('technologies').innerHTML = data.technologies.map(tech => 
+                    `<span class="tech-badge">${tech}</span>`
+                ).join('');
+            } else {
+                document.getElementById('techSection').style.display = 'none';
+            }
+            
+            if (data.subdomains && data.subdomains.length > 0) {
+                document.getElementById('subdomainSection').style.display = 'block';
+                document.getElementById('subdomains').innerHTML = data.subdomains.map(sub => 
+                    `<span class="subdomain-badge">${sub}</span>`
+                ).join('');
+            } else {
+                document.getElementById('subdomainSection').style.display = 'none';
+            }
+            
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            
+            setupExport(data);
+        }
+        
+        function setupExport(data) {
+            document.getElementById('exportJSON').onclick = () => {
+                const jsonStr = JSON.stringify(data, null, 2);
+                const blob = new Blob([jsonStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${data.target}_analysis_${Date.now()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+            };
+            
+            document.getElementById('copyResults').onclick = () => {
+                const jsonStr = JSON.stringify(data, null, 2);
+                navigator.clipboard.writeText(jsonStr);
+                alert('Results copied to clipboard');
+            };
+        }
+    </script>
+</body>
+</html>
