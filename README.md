@@ -16,6 +16,15 @@ An web-based network intelligence tool that gathers publicly available informati
 - **Subdomain Discovery** - Find active subdomains like www, mail, admin, api, etc.
 - **Export Results** - Save analysis as JSON or copy to clipboard
 
+## Website
+https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142016.png
+https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142124.png
+https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142140.png
+https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142154.png
+https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142216.png
+https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142231.png
+https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142240.png
+
 ## Legal & Ethical Use
 
 This tool only collects **publicly available information** through:
@@ -41,14 +50,14 @@ This tool only collects **publicly available information** through:
 
 ### Step 1: Clone the Repository
 
-git clone https://github.com/yourusername/network-analyzer.git
-cd network-analyzer
+- git clone https://github.com/yourusername/network-analyzer.git
+- cd network-analyzer
 
 ### Step 2: Install Dependencies
-pip install flask flask-cors dnspython python-whois requests
+- pip install flask flask-cors dnspython python-whois requests
 
 ### Step 3: Run the Application
-python app.py
+- python app.py
 
 ## Contact
 - **Email**: marjiakhatun.my@gmail.com
