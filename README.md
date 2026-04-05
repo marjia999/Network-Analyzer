@@ -17,13 +17,13 @@ An web-based network intelligence tool that gathers publicly available informati
 - **Export Results** - Save analysis as JSON or copy to clipboard
 
 ## Website
-https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142016.png
-https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142124.png
-https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142140.png
-https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142154.png
-https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142216.png
-https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142231.png
-https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142240.png
+![](https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142016.png)
+![](https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142124.png)
+![](https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142140.png)
+![](https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142154.png)
+![](https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142216.png)
+![](https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142231.png)
+![](https://github.com/marjia999/Network-Analyzer/blob/f0e54df6a284c25de8bd5a640d00bb849cb82b89/images/Screenshot%202026-04-05%20142240.png)
 
 ## Legal & Ethical Use
 
