@@ -1,6 +1,6 @@
-# Network Analyzer
+# Network Analyzer Tool
 
-An web-based network intelligence tool that gathers publicly available information about domains and IP addresses. Built with Flask and modern web technologies.
+An web-based network intelligence tool that gathers publicly available information about domains and IP addresses including WHOIS, DNS, SSL, geolocation, ping, traceroute, and port scanning.
 
 ## Features
 
